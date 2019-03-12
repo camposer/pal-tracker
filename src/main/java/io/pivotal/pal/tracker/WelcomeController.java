@@ -10,7 +10,7 @@ public class WelcomeController {
 
     private final String hello;
 
-    public WelcomeController(@Value("${welcome.message}") String hello, @Value("${welcome.ignored:NOT SET}") String s) {
+    public WelcomeController(@Value("${welcome.message:NOT SET}") String hello, @Value("${welcome.ignored:NOT SET}") String s) {
         this.hello = hello;
     }
 
