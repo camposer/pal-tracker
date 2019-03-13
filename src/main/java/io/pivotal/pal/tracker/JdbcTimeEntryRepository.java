@@ -1,29 +1,28 @@
 package io.pivotal.pal.tracker;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
-@Repository
 public class JdbcTimeEntryRepository implements TimeEntryRepository {
     private JdbcTemplate jdbcTemplate;
-    private RowMapper<TimeEntry> rowMapper = (rs, rowNum) -> new TimeEntry(
+    private final RowMapper<TimeEntry> rowMapper = (rs, rowNum) -> new TimeEntry(
             rs.getLong("id"),
             rs.getLong("project_id"),
             rs.getLong("user_id"),
             rs.getDate("date").toLocalDate(),
             rs.getInt("hours")
     );
-    private ResultSetExtractor<TimeEntry> rsExtractor = (rs) -> rs.next() ? rowMapper.mapRow(rs, 1) : null;
+    private final ResultSetExtractor<TimeEntry> rsExtractor = (rs) -> rs.next() ? rowMapper.mapRow(rs, 1) : null;
 
     @Autowired
     public JdbcTimeEntryRepository(DataSource dataSource) {
